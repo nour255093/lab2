@@ -4,20 +4,60 @@ using UnityEngine;
 
 public class playermovement : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public float movespeed;
+    public float jumpheight;
+    public KeyCode spacebar;
+    public KeyCode L;
+    public KeyCode R;
+    public Transform groundCheck;
+    public float groundCheckRaduis;
+    public LayerMask    whatIsGround;
+    private bool grounded;
     void Start()
     {
-      public float movespeed;
-      public float jumpHeight;
-      public keycode spacebar;
-      public keycode;
-      public keycode; 
     }
 
     // Update is called once per frame
     void Update()
-    if(input.getkeyDown(spacebar))
     {
-       jump() 
+        if(Input.GetKeyDown(spacebar) && grounded)
+        {
+            Jump();
+        }
+
+        if(Input.GetKey(L))
+        {
+         GetComponent<Rigidbody2D>().velocity= new Vector2(-movespeed,GetComponent<Rigidbody2D>().velocity.y);
+         if(GetComponent<SpriteRenderer>()!=null){
+            GetComponent<SpriteRenderer>().flipX=true;
+         }
+        }
+        if(Input.GetKey(R))
+        {
+         GetComponent<Rigidbody2D>().velocity= new Vector2(movespeed,GetComponent<Rigidbody2D>().velocity.y);
+          if(GetComponent<SpriteRenderer>()!=null){
+            GetComponent<SpriteRenderer>().flipX=false;
+           
+         } 
+          anim.SetFloat("Speed",Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x));
+         anim.SetFloat("Height", GetComponent<Rigidbody2D>().velocity.y);
+            anim.SetBool("Grounded", grounded);
+         }
+        }
+        
+    
+    
+
+    void Jump()
+    {
+   GetComponent<Rigidbody2D>().velocity= new Vector2(GetComponent<Rigidbody2D>().velocity.x,jumpheight);
     }
+
+    void FixedUpdate()
+    {
+    grounded= Physics2D.OverlapCircle(groundCheck.position,groundCheckRaduis,whatIsGround);
+    }
+
+  
+
 }
